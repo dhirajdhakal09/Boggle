@@ -38,12 +38,12 @@ button {
   font-size: 20px;  
 }
 
-.scoreContainer{
+.scoreContainer, .messageContainer{
   padding:15px;
   text-align: center;
 }
 
-.scoreTimer{
+.scoreTimer, .successMessage, .errorMessage{
   display:inline-block;
   width: 256px;
   font-weight: bold;
@@ -52,6 +52,15 @@ button {
   padding: 15px;
   border: 1px solid green;
   background: green;
+}
+
+.successMessage, .errorMessage{
+  width:300px;
+}
+
+.errorMessage{
+  border: 1px solid red;
+  background-color: red;
 }
 
 .score{

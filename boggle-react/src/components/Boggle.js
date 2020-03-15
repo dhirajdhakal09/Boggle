@@ -7,7 +7,9 @@ class Boggle extends Component {
     array = [];
     state = {
         formDisable: false,
+        correct:true,
         score: 0,
+        message:'No point yet',
         boggleArray: [
             {
                 'id': 1,
@@ -91,7 +93,10 @@ class Boggle extends Component {
             this.array.push(input);
             this.process(input);
         } else {
-            alert('already added');
+            this.setState({             
+                correct:false,
+                message:"Already added"
+            })
         }
 
 
@@ -113,7 +118,11 @@ class Boggle extends Component {
         }
 
         if (!success) {
-            alert('invalid word')
+            //alert('invalid word')
+            this.setState({             
+                correct:false,
+                message:"Invalid word!!"
+            })
         } else {
             // call HTTP to validate against dictionary
             this.validateWordAgainstDictionary(input);
@@ -133,13 +142,21 @@ class Boggle extends Component {
 
                         let score = Object.keys(input).length;
                         this.setState({
-                            score: this.state.score + score
+                            score: this.state.score + score,
+                            correct:true,
+                            message:"Correct"
                         })
 
-                        alert('Correct word');
+                        //alert('Correct word');
                         //correct word
                     } else {
                         //incorrect word
+
+                        this.setState({
+                            
+                            correct:false,
+                            message:"Invalid word!!"
+                        })
                     }
                 },
 
@@ -377,7 +394,7 @@ class Boggle extends Component {
 
     render() {
 
-        const { formDisable, score } = this.state;
+        const { formDisable, score, correct,message } = this.state;
         return (
 
 
@@ -398,6 +415,11 @@ class Boggle extends Component {
                         <input className={formDisable ? "disabled" : ""} disabled={formDisable ? "disabled" : ""}type="text" maxLength="4" placeholder="Input" ref={input => this.name = input} />
                         <div><button type="submit" className="btn btn-primary">Submit</button></div>
                     </form>
+                </div>
+                <div className="messageContainer">
+                    <div className={correct ? "successMessage" : "errorMessage"}>
+                        {message}
+                    </div>
                 </div>
             </div>
 

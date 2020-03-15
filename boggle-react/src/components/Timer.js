@@ -25,7 +25,7 @@ class Timer extends Component {
             let seconds = secondsRemaining - (minutes * 60);
             seconds = (Object.keys(seconds.toString()).length > 1)?  seconds : '0' + seconds;
             
-            if(seconds == 0){
+            if(seconds == 0 && minutes == 0){
                 clearInterval(this.tick);
                 this.props.parentCallBack();
             }

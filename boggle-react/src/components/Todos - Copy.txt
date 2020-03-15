@@ -1,0 +1,347 @@
+import React, { Component } from 'react';
+import CharactersList from './CharactersList'
+
+class Todos extends Component {
+    
+    state = {
+        todos:[
+            {
+                'id':1,
+                'name':'a'
+            },
+            {
+                'id':2,
+                'name':'b'
+            },
+            {
+                'id':3,
+                'name':'c'
+            },
+            {
+                'id':4,
+                'name':'d'
+            },
+            {
+                'id':5,
+                'name':'e'
+            },
+            {
+                'id':6,
+                'name':'f'
+            },
+            {
+                'id':7,
+                'name':'g'
+            },
+            {
+                'id':8,
+                'name':'h'
+            },
+            {
+                'id':9,
+                'name':'i'
+            },
+            {
+                'id':10,
+                'name':'j'
+            },
+            {
+                'id':11,
+                'name':'k'
+            },
+            {
+                'id':12,
+                'name':'l'
+            },
+            {
+                'id':13,
+                'name':'m'
+            },
+            {
+                'id':14,
+                'name':'n'
+            },
+            {
+                'id':15,
+                'name':'o'
+            },
+            {
+                'id':16,
+                'name':'p'
+            }
+        ]
+    }
+
+    handleSubmit = (event) => {
+        event.preventDefault();
+        //alert('Your input is: ' + this.name.value);
+        this.process(this.name.value);
+      };
+
+    process(input){
+
+        if(!input){
+            alert('Please enter some text');
+            return;
+        }
+
+       //this.checkleftToRightHorizontal(input);
+       //this.checkTopToBottomVertical(input);
+
+       //left down
+       
+       let success = this.checkTopToBottomDiagonal(input, 3);
+       if(!success){
+        this.checkTopToBottomDiagonal(input, 0);
+       }
+    }
+
+    checkTopToBottomDiagonal(input, initCol){
+
+        const inputArray = input.split('');
+        let success = false;
+        for(let i = 0; i<=1; i++){
+
+            let col = initCol;
+            let correctCount = 0;
+            let inputArrayCount = 0;
+            let row = i;
+            for(let j = 0; j<= inputArray.length; j++){
+
+                if( (4*row + col) > 15 || (4*row + col) < 0 ){
+                    break;
+                }
+                if(this.state.todos[( 4 * row + col)].name == inputArray[inputArrayCount]){
+                    
+                    correctCount++;
+                    inputArrayCount++;
+                }
+                //correct only for some chars 
+                else if(correctCount > 0){
+                    //correctCount = 0;
+                    break; 
+                }else{ //not a single match match
+
+                }
+
+                if(correctCount == inputArray.length){
+                    success = true;
+                    alert('correct');
+                    return;
+                }
+
+                (initCol == 0) ? col ++ : col--;
+                row ++;
+            }
+
+            if(success ){
+                return true;
+            }
+        }
+
+    }
+
+    checkleftToRightHorizontal(input) {
+
+        const inputArray = input.split('');
+        let success = false;
+        for(let i = 0; i<=3; i++){
+
+            let col = 0;
+            let correctCount = 0;
+            let inputArrayCount = 0;
+            for(let j = 0; j<= inputArray.length; j++){
+
+                if(this.state.todos[( 4 * i + col)].name == inputArray[inputArrayCount]){
+                    
+                    correctCount++;
+                    inputArrayCount++;
+                }
+                //correct only for some chars 
+                else if(correctCount > 0){
+                    //correctCount = 0;
+                    break; 
+                }else{ //not a single match match
+
+                }
+
+                if(correctCount == inputArray.length){
+                    success = true;
+                    alert('correct');
+                    return;
+                }
+
+                col ++;
+            }
+
+            if(success ){
+                return;
+            }
+        }
+    }
+
+    checkTopToBottomVertical(input){
+
+        const inputArray = input.split('');
+        let success = false;
+        for(let i = 0; i<=3; i++){
+
+            let row = 0;
+            let correctCount = 0;
+            let inputArrayCount = 0;
+            for(let j = 0; j<= inputArray.length; j++){
+
+                if(this.state.todos[(4 * row + i)].name == inputArray[inputArrayCount]){
+                    
+                    correctCount++;
+                    inputArrayCount++;
+                }
+                //correct only for some chars 
+                else if(correctCount > 0){
+                    //correctCount = 0;
+                    break; 
+                }else{ //not a single match match
+
+                }
+
+                if(correctCount == inputArray.length){
+                    success = true;
+                    alert('correct');
+                    return;
+                }
+
+                row ++;
+            }
+
+            if(success ){
+                return;
+            }
+        }
+    }
+    //
+
+    componentDidMount() {
+        fetch('http://localhost:3000/api/articles/get')
+          .then(res => res.json())
+          .then(
+            (result) => {
+              /*this.setState({
+                isLoaded: true,
+                items: result.items
+              });*/
+              console.log(result.data);
+              var y = result.data.rv;
+              console.log(y);
+              var x = y.split('');
+              var charArray = [];
+              x.map((r, i)=> {
+                charArray.push({'id':i+1, 'name':r})
+              });
+              this.setState({
+
+                todos: charArray
+              });
+            },
+            // Note: it's important to handle errors here
+            // instead of a catch() block so that we don't swallow
+            // exceptions from actual bugs in components.
+            (error) => {
+              /*this.setState({
+                isLoaded: true,
+                error
+              });*/
+              console.log('here')
+              console.log(error);
+            }
+          )
+      }
+
+
+    //
+
+    renderHorizontal(){
+        
+        
+        const listStyle = {	display: "inline-block",
+            padding: "10px",
+            height: "50px",
+            width: "50px",
+            fontSize: "40px",
+            lineHeight: "50px",
+            margin: "auto",
+            border: "1px solid gray",
+        };
+        let parentDiv = []
+        let index = 0;
+        let count = 0;
+        for (let i = 0; i < 4; i++) {
+            console.log(count);
+
+           let childDiv = []
+           for(let j = index; j<=index+3; j++){
+
+                childDiv.push(<div style={listStyle} >{' '}
+                {this.state.todos[j].name} 
+                </div>)
+             }
+
+           index = index + 4;
+           parentDiv.push(<div style={{display:"block"}}>{childDiv} </div>)
+           count++;
+        }
+
+        return parentDiv;
+    }
+
+    
+    render() {
+        let i = 0;
+        let j = 1;
+       // console.log(this.state.todos);
+        return (
+
+
+                        <div>
+                            {this.renderHorizontal()}
+
+                            <div>
+                <form onSubmit={this.handleSubmit}>
+                    <input type="text" maxLength="4" placeholder="Input" ref={input => this.name = input}/>
+                    <button type="submit" className="btn btn-primary">Submit</button>
+                </form>
+            </div>
+                        </div>
+                /*<div style={{display:"block"}}>
+                
+                       {this.state.todos.map((a) =>{
+                      
+                       
+                       //console.log(i);
+                       i++;
+                       if(i % (4) != 1 || i == 1){
+                        //console.log("j = " +j);
+
+                        console.log("inline i=" + i);
+                        //j++;
+                     return <div style={{display:"inline-block"}} >
+                     {a.id} 
+                     </div>
+                    }else{
+                        j++;
+                        console.log("block i=" + i);
+                        return <div style={{display:"block"}}>
+                        {a.id} 
+                        </div>
+                    }
+
+
+                       })
+                       }
+
+                </div>*/
+
+        );
+    }
+}
+
+export default Todos;
